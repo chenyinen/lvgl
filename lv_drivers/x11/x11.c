@@ -150,7 +150,9 @@ void lv_x11_flush(lv_disp_drv_t *disp_drv, const lv_area_t *area, lv_color_t *co
                                         .y1 = 0xFFFF,
                                         .y2 = 0
                                       };
-    static lv_area_t upd_area = inv_area;
+    static lv_area_t upd_area ;
+
+    memcpy(&upd_area, &inv_area, sizeof(upd_area));
 
     /* build display update area until lv_disp_flush_is_last */
     upd_area.x1 = MIN(upd_area.x1, area->x1);
@@ -198,7 +200,7 @@ void lv_x11_get_pointer(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
 void lv_x11_get_mousewheel(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
 {
     (void) indev_drv; // Unused
-
+    
     data->state = wheel_mouse_btn ? LV_INDEV_STATE_PRESSED : LV_INDEV_STATE_RELEASED;
     data->enc_diff = wheel_cnt;
     wheel_cnt = 0;

@@ -14,9 +14,13 @@ get_filename_component(LV_CONF_DIR ${LV_CONF_PATH} DIRECTORY)
 # Option to build shared libraries (as opposed to static), default: OFF
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
+#file(COPY ${LVGL_ROOT_DIR}/ui_project/lv_conf.h DESTINATION ${LVGL_ROOT_DIR}/src)
 file(GLOB_RECURSE SOURCES ${LVGL_ROOT_DIR}/src/*.c)
 file(GLOB_RECURSE EXAMPLE_SOURCES ${LVGL_ROOT_DIR}/examples/*.c)
 file(GLOB_RECURSE DEMO_SOURCES ${LVGL_ROOT_DIR}/demos/*.c)
+file(GLOB_RECURSE UI_SOURCES ${LVGL_ROOT_DIR}/ui_project/*.c)
+
+set(CMAKE_BUILD_TYPE DEBUG)
 
 if (BUILD_SHARED_LIBS)
   add_library(lvgl SHARED ${SOURCES})
@@ -29,6 +33,14 @@ add_library(lvgl_examples STATIC ${EXAMPLE_SOURCES})
 add_library(lvgl::examples ALIAS lvgl_examples)
 add_library(lvgl_demos STATIC ${DEMO_SOURCES})
 add_library(lvgl::demos ALIAS lvgl_demos)
+
+add_executable(ui_app)
+target_sources(ui_app PUBLIC ${UI_SOURCES})
+target_sources(ui_app PUBLIC ${LVGL_ROOT_DIR}/lv_drivers/x11/x11.c)
+target_include_directories(ui_app SYSTEM PUBLIC ${LVGL_ROOT_DIR}/lv_drivers/x11/)
+target_link_libraries(ui_app PUBLIC lvgl_examples lvgl_demos X11)
+target_include_directories(ui_app SYSTEM PUBLIC ${LVGL_ROOT_DIR}/ui_project)
+target_include_directories(lvgl SYSTEM PUBLIC ${LVGL_ROOT_DIR}/ui_project)
 
 target_compile_definitions(
   lvgl PUBLIC $<$<BOOL:${LV_LVGL_H_INCLUDE_SIMPLE}>:LV_LVGL_H_INCLUDE_SIMPLE>
