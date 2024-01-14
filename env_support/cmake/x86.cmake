@@ -34,6 +34,8 @@ add_library(lvgl::examples ALIAS lvgl_examples)
 add_library(lvgl_demos STATIC ${DEMO_SOURCES})
 add_library(lvgl::demos ALIAS lvgl_demos)
 
+target_link_libraries(lvgl PUBLIC avformat avcodec avutil swscale)
+
 add_executable(ui_app)
 target_sources(ui_app PUBLIC ${UI_SOURCES})
 target_sources(ui_app PUBLIC ${LVGL_ROOT_DIR}/lv_drivers/x11/x11.c)
