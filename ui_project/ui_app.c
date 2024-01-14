@@ -8,6 +8,7 @@ void ui_app_init()
 {
     //ui_maintain_init(lv_scr_act());
     //lv_demo_music();
-    user_guide_init(lv_scr_act());
+    //user_guide_init(lv_scr_act());
+    wifi_connecting_init(lv_scr_act());
     return ;
 }

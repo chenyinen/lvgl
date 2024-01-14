@@ -11,4 +11,6 @@ void ui_maintain_init(lv_obj_t *parent);
 
 void user_guide_init(lv_obj_t *parent);
 
+void wifi_connecting_init(lv_obj_t *parent);
+
 #endif
