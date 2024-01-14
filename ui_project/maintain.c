@@ -4,12 +4,22 @@
 #include <lvgl.h>
 #include "common.h"
 
+struct maintain_ctx_info {
+    lv_obj_t *menu;
+};
+
+
+struct maintain_ctx_info* get_maintain_ctx()
+{
+    static struct maintain_ctx_info maintain_ctx;
+    return &maintain_ctx;
+}
+
 enum {
     LV_MENU_ITEM_BUILDER_VARIANT_1,
     LV_MENU_ITEM_BUILDER_VARIANT_2
 };
 typedef uint8_t lv_menu_builder_variant_t;
-lv_obj_t * menu;
 static lv_obj_t * create_text(lv_obj_t * parent, const char * icon, const char * txt,
                               lv_menu_builder_variant_t builder_variant)
 {
@@ -63,6 +73,9 @@ static lv_obj_t * create_switch(lv_obj_t * parent, const char * icon, const char
 
     return obj;
 }
+/*
+* wifi 页签
+*/
 static lv_obj_t* create_wifi_page(lv_obj_t *parent)
 {
     lv_obj_t *cont, *label;
@@ -75,6 +88,9 @@ static lv_obj_t* create_wifi_page(lv_obj_t *parent)
 
     return cont;
 }
+/**
+ * 用户信息页签
+*/
 static lv_obj_t* create_user_page(lv_obj_t *parent)
 {
     lv_obj_t *cont, *label;
@@ -87,14 +103,30 @@ static lv_obj_t* create_user_page(lv_obj_t *parent)
 
     return cont;
 }
+/**
+ * 菜单返回
+*/
+static void back_event_handler(lv_event_t * e)
+{
+    lv_obj_t * obj = lv_event_get_target(e);
+    lv_obj_t * menu = lv_event_get_user_data(e);
+
+    if(lv_menu_back_btn_is_root(menu, obj)) {
+        lv_obj_t * mbox1 = lv_msgbox_create(NULL, "Hello", "Root back btn click.", NULL, true);
+        lv_obj_center(mbox1);
+    }
+}
 void ui_maintain_init(lv_obj_t *parent)
 {
+    struct maintain_ctx_info* maintain_ctx = get_maintain_ctx();
+    lv_obj_t * menu;
+
     lv_group_remove_all_objs(lv_group_get_default());
 
     menu = lv_menu_create(parent);
     //lv_obj_set_style_bg_color(menu, lv_palette_main(LV_PALETTE_BLUE), 0);
     lv_menu_set_mode_root_back_btn(menu, LV_MENU_ROOT_BACK_BTN_ENABLED);
-    //lv_obj_add_event_cb(menu, back_event_handler, LV_EVENT_CLICKED, menu);
+    lv_obj_add_event_cb(menu, back_event_handler, LV_EVENT_CLICKED, menu);
     lv_obj_set_size(menu, lv_disp_get_hor_res(NULL), lv_disp_get_ver_res(NULL));
     lv_obj_center(menu);
 
@@ -142,5 +174,7 @@ void ui_maintain_init(lv_obj_t *parent)
 
     lv_menu_set_sidebar_page(menu, root_page);
     lv_event_send(lv_obj_get_child(lv_obj_get_child(lv_menu_get_cur_sidebar_page(menu), 0), 0), LV_EVENT_CLICKED, NULL);
+    maintain_ctx->menu = menu;
+
     return;
 }

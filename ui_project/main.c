@@ -8,9 +8,14 @@
 #include <lvgl.h>
 #include <x11.h>
 #include "common.h"
+
 #define X11_WIDTH 480
 #define X11_HEIGHT 800
 
+void lv_get_button(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
+{
+    return ;
+}
 
 int main()
 {
@@ -36,24 +41,36 @@ int main()
     lv_group_set_default(g);
     disp = lv_disp_drv_register(&disp_drv);
 
+    /* 鼠标 */
     static lv_indev_drv_t indev_drv_point;       
     lv_indev_drv_init(&indev_drv_point);         
     indev_drv_point.type = LV_INDEV_TYPE_POINTER;
     indev_drv_point.read_cb = lv_x11_get_pointer;
     lv_indev_drv_register(&indev_drv_point);     
 
+    /* 键盘 */
     static lv_indev_drv_t indev_drv_key;         
     lv_indev_drv_init(&indev_drv_key);           
     indev_drv_key.type = LV_INDEV_TYPE_KEYPAD;   
     indev_drv_key.read_cb = lv_x11_get_keyboard; 
     lv_indev_drv_register(&indev_drv_key);       
 
+    /* 滚轮 */
     static lv_indev_drv_t indev_drv_encode;      
     lv_indev_drv_init(&indev_drv_encode);        
     indev_drv_encode.type = LV_INDEV_TYPE_ENCODER;    
     indev_drv_encode.read_cb = lv_x11_get_mousewheel; 
     indev = lv_indev_drv_register(&indev_drv_encode);         
     lv_indev_set_group(indev, g);
+
+    // /* 按键 */
+    // static lv_indev_drv_t indev_drv_button;
+    // static lv_point_t points[2] = {{10, 10}, {100, 100}};
+    // lv_indev_drv_init(&indev_drv_button);     
+    // indev_drv_button.type = LV_INDEV_TYPE_BUTTON;  
+    // indev_drv_button.read_cb = lv_get_button; 
+    // indev = lv_indev_drv_register(&indev_drv_button);     
+    // lv_indev_set_button_points(indev, points);
     
     ui_app_init();
 
