@@ -32,7 +32,8 @@ int main()
     disp_drv.flush_cb = lv_x11_flush;       
     disp_drv.hor_res = X11_WIDTH;           
     disp_drv.ver_res = X11_HEIGHT;          
-    disp_drv.direct_mode = 1;
+    disp_drv.direct_mode = 0;
+    disp_drv.full_refresh = 0;
 
     static lv_group_t * g;
     lv_disp_t * disp;
@@ -71,7 +72,7 @@ int main()
     // indev_drv_button.read_cb = lv_get_button; 
     // indev = lv_indev_drv_register(&indev_drv_button);     
     // lv_indev_set_button_points(indev, points);
-    
+    //lv_example_chart_2();
     ui_app_init();
 
     while(1) {
