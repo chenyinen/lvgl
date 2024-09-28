@@ -3,7 +3,7 @@
 
 #include <lvgl.h>
 
-void ui_app_init(void);
+void ui_app_init(lv_obj_t *parent);
 
 void audio_volue_init(lv_obj_t *parent);
 

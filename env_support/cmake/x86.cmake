@@ -40,7 +40,7 @@ add_executable(ui_app)
 target_sources(ui_app PUBLIC ${UI_SOURCES})
 target_sources(ui_app PUBLIC ${LVGL_ROOT_DIR}/lv_drivers/x11/x11.c)
 target_include_directories(ui_app SYSTEM PUBLIC ${LVGL_ROOT_DIR}/lv_drivers/x11/)
-target_link_libraries(ui_app PUBLIC lvgl_examples lvgl_demos X11)
+target_link_libraries(ui_app PUBLIC lvgl_examples lvgl_demos X11 pthread)
 target_include_directories(ui_app SYSTEM PUBLIC ${LVGL_ROOT_DIR}/ui_project)
 target_include_directories(lvgl SYSTEM PUBLIC ${LVGL_ROOT_DIR}/ui_project)
 

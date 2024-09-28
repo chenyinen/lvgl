@@ -8,15 +8,15 @@
 #include <lvgl.h>
 #include <x11.h>
 #include "common.h"
-
+#include <pthread.h>
 #define X11_WIDTH 480
 #define X11_HEIGHT 800
 
-void lv_get_button(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
-{
-    return ;
-}
 
+static void tick_handler(void * p)
+{
+    
+}
 int main()
 {
     lv_init();
@@ -32,13 +32,14 @@ int main()
     disp_drv.flush_cb = lv_x11_flush;       
     disp_drv.hor_res = X11_WIDTH;           
     disp_drv.ver_res = X11_HEIGHT;          
-    disp_drv.direct_mode = 1;
+    disp_drv.direct_mode = 0;
+    disp_drv.full_refresh = 0;
 
     static lv_group_t * g;
     lv_disp_t * disp;
     lv_indev_t *indev;
-    g = lv_group_create();
-    lv_group_set_default(g);
+    // g = lv_group_create();
+    // lv_group_set_default(g);
     disp = lv_disp_drv_register(&disp_drv);
 
     /* 鼠标 */
@@ -71,8 +72,9 @@ int main()
     // indev_drv_button.read_cb = lv_get_button; 
     // indev = lv_indev_drv_register(&indev_drv_button);     
     // lv_indev_set_button_points(indev, points);
-    
-    ui_app_init();
+    //lv_example_chart_2();
+    ui_app_init(lv_scr_act());
+
 
     while(1) {
         lv_task_handler();
